@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>生成单个 3D 素材</h2>
+<form action="{{ url_for('generate') }}" method="post" enctype="multipart/form-data">
+  <fieldset>
+    <label>生成模式
+      <select name="mode">
+        <option value="text">文本生成 3D</option>
+        <option value="image">图片转 3D</option>
+      </select>
+    </label>
+    <label>提示词 / 物体描述
+      <input type="text" name="prompt" placeholder="例如：一匹卡通风格的小马，低面数，Q版" required>
+    </label>
+    <label>（可选）参考图片
+      <input type="file" name="image" accept="image/*">
+    </label>
+    <div class="grid">
+      <label>Provider
+        <select name="provider">
+          <option value="meshy">Meshy（文本转3D）</option>
+          <option value="tripoSR">TripoSR（图像转3D）</option>
+          <option value="kaedim">Kaedim（2D转3D）</option>
+          <option value="mock">Mock（占位）</option>
+        </select>
+      </label>
+      <label>复用策略
+        <select name="reuse_policy" title="减少 API 调用的策略">
+          <option value="smart" selected>智能复用（缓存+相似度）</option>
+          <option value="always">只用缓存</option>
+          <option value="never">总是调用API</option>
+        </select>
+      </label>
+    </div>
+    <button type="submit">生成</button>
+  </fieldset>
+</form>
+
+<h3>最近 10 次生成</h3>
+<table>
+  <thead><tr><th>ID</th><th>描述</th><th>Provider</th><th>耗时(ms)</th><th>缓存</th><th>详情</th></tr></thead>
+  <tbody>
+    {% for g in gens %}
+      <tr>
+        <td>{{ g.id }}</td>
+        <td>{{ g.prompt }}</td>
+        <td>{{ g.provider }}</td>
+        <td>{{ g.duration_ms }}</td>
+        <td>{{ g.cache_hit }}</td>
+        <td><a href="{{ url_for('detail', gen_id=g.id) }}">查看</a></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

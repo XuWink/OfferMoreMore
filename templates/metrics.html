@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>效果评估（KPI 仪表板）</h2>
+<ul>
+  <li>累计生成：{{ data.total_generations }}</li>
+  <li>缓存/相似复用命中率：{{ data.cache_hit_rate }}%</li>
+  <li>平均用户评分：{{ data.avg_user_rating or '—' }}</li>
+  <li>平均生成耗时（ms）：{{ data.avg_generation_time_ms or '—' }}</li>
+</ul>
+<h3>热门提示词</h3>
+<table>
+  <thead><tr><th>提示词</th><th>次数</th></tr></thead>
+  <tbody>
+    {% for r in data.top_prompts %}
+      <tr><td>{{ r.prompt }}</td><td>{{ r.n }}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+<p class="code">说明：以上 KPI 分为主观（用户评分）与客观（生成时延、缓存命中率）两类，用于指导 Provider 选择和提示工程迭代。</p>
+{% endblock %}

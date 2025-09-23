@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI 3D 单体生成器</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <style>
+    .container { max-width: 980px; }
+    .code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+  </style>
+</head>
+<body>
+  <nav class="container">
+    <ul>
+      <li><strong><a href="{{ url_for('index') }}">AI 3D 单体生成器</a></strong></li>
+    </ul>
+    <ul>
+      <li><a href="{{ url_for('metrics') }}">效果评估</a></li>
+      <li><a href="https://threejs.org/" target="_blank">Three.js</a></li>
+      <li><a href="https://docs.meshy.ai/api/text-to-3d" target="_blank">Meshy API</a></li>
+    </ul>
+  </nav>
+  <main class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div>
+          {% for cat,msg in messages %}
+            <article class="contrast"><strong>{{cat}}</strong> — {{msg}}</article>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="container">
+    <small class="code">示例应用 · Flask + HTML · 本地占位 Provider（可替换为 Meshy/Kaedim/TripoSR 等）</small>
+  </footer>
+</body>
+</html>
